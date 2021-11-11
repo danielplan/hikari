@@ -4,33 +4,41 @@ import { renderImage } from "./render";
 const imageCanvas = document.createElement('canvas');
 const canvasContext = imageCanvas.getContext('2d')!;
 
-export function renderEditor(root: HTMLElement, files: FileList) {
+export async function renderEditor(root: HTMLElement, files: FileList) {
     if (files && files[0]) {
         root.innerHTML = '';
         const file = files[0];
-        getBase64(file).then((imgData) => {
-            root.appendChild(imageCanvas);
-            const img = new Image();
+        const imgData = await getBase64(file);
+        root.appendChild(imageCanvas);
+        const img = new Image();
 
-            img.src = imgData.toString();
-            img.onload = () => {
-                const dimensions = resizeImage(img.width, img.height);
-                imageCanvas.setAttribute('width', dimensions.width.toString());
-                imageCanvas.setAttribute('height', dimensions.height.toString());
-                canvasContext.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
-                const brightnessSlider = createRangeControl(-100, 100, 'Brightness', 0, root);
-                const contrastSlider = createRangeControl(-100, 100, 'Contrast', 0, root);
-                const controls = {
-                    brightness: brightnessSlider,
-                    contrast: contrastSlider
-                }
-                Object.values(controls).forEach((v) => {
-                    v.addEventListener('change', () => renderImage(img, imageCanvas, canvasContext, controls));
-                });
-            }
-        });
+        img.src = imgData.toString();
+        img.onload = () => {
+            const dimensions = resizeImage(img.width, img.height);
+            imageCanvas.setAttribute('width', dimensions.width.toString());
+            imageCanvas.setAttribute('height', dimensions.height.toString());
+            canvasContext.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
+            renderControls(root, img);
+        }
+    }
+}
+
+
+function renderControls(root: HTMLElement, img: HTMLImageElement) {
+    const brightness = createRangeControl(-100, 100, 'Brightness', 0, root);
+    const contrast = createRangeControl(-100, 100, 'Contrast', 0, root);
+    const saturation = createRangeControl(-100, 100, 'Saturation', 0, root);
+    const greenSaturation = createRangeControl(-100, 100, 'Green Saturation', 0, root);
+    const controls = {
+        brightness,
+        contrast,
+        saturation,
+        greenSaturation,
     }
 
+    Object.values(controls).forEach((v) => {
+        v.addEventListener('change', () => renderImage(img, imageCanvas, canvasContext, controls));
+    });
 }
 
 function getBase64(file: File) {
