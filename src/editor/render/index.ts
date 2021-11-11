@@ -1,4 +1,4 @@
-import { brighten, darken, saturate, deSaturate } from './effects';
+import { brighten, darken, saturate } from './effects';
 import { isBright, getMean, isGreen, isRed, isBlue, isPurple, isTeal, isYellow } from './helpers';
 
 interface Controls {
@@ -111,10 +111,5 @@ function adjustYellowSaturation(data: ImageData, i: number, value: any): void {
 function adjustSaturation(data: ImageData, i: number, value: any): void {
     value = Number.parseInt(value);
     const mean = getMean(data, i);
-    if (value > 0) {
-        saturate(data, i, mean, value);
-    } else {
-        value *= -1;
-        deSaturate(data, i, mean, value);
-    }
+    saturate(data, i, mean, value);
 }
