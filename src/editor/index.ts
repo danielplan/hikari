@@ -25,15 +25,16 @@ export async function renderEditor(root: HTMLElement, files: FileList) {
 
 
 function renderControls(root: HTMLElement, img: HTMLImageElement) {
-    const brightness = createRangeControl(-100, 100, 'Brightness', 0, root);
-    const contrast = createRangeControl(-100, 100, 'Contrast', 0, root);
-    const saturation = createRangeControl(-100, 100, 'Saturation', 0, root);
-    const greenSaturation = createRangeControl(-100, 100, 'Green Saturation', 0, root);
     const controls = {
-        brightness,
-        contrast,
-        saturation,
-        greenSaturation,
+        brightness: createRangeControl(-100, 100, 'Brightness', 0, root),
+        contrast: createRangeControl(-100, 100, 'Contrast', 0, root),
+        saturation: createRangeControl(-100, 100, 'Saturation', 0, root),
+        redSaturation: createRangeControl(-100, 100, 'Red Saturation', 0, root),
+        greenSaturation: createRangeControl(-100, 100, 'Green Saturation', 0, root),
+        blueSaturation: createRangeControl(-100, 100, 'Blue Saturation', 0, root),
+        purpleSaturation: createRangeControl(-100, 100, 'Purple Saturation', 0, root),
+        tealSaturation: createRangeControl(-100, 100, 'Teal Saturation', 0, root),
+        yellowSaturation: createRangeControl(-100, 100, 'Yellow Saturation', 0, root),
     }
 
     Object.values(controls).forEach((v) => {

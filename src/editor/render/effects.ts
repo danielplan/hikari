@@ -25,11 +25,3 @@ export function deSaturate(data: ImageData, i: number, mean: number, value: numb
     data.data[i + 1] += (mean - data.data[i + 1]) * value / 100;
     data.data[i + 2] += (mean - data.data[i + 2]) * value / 100;
 }
-
-export function getMean(data: ImageData, i: number): number {
-    return (data.data[i + 0] + data.data[i + 1] + data.data[i + 2]) / 3;
-}
-
-export function isBright(mean: number): boolean {
-    return mean > 125;
-}
