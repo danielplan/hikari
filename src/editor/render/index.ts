@@ -1,5 +1,5 @@
 import { brighten, darken, saturate } from './effects';
-import { isBright, getMean, isGreen, isRed, isBlue, isPurple, isTeal, isYellow } from './helpers';
+import { isBright, getMean, isRed, getHue, isGreen, isBlue } from './helpers';
 
 interface Controls {
     brightness: HTMLInputElement;
@@ -13,103 +13,100 @@ interface Controls {
     yellowSaturation: HTMLInputElement;
 }
 
+export interface BasicData {
+    imageData: ImageData;
+    i: number;
+}
+
+export interface SaturationData extends BasicData {
+    mean: number;
+}
+
+export interface ColorSaturationData extends SaturationData {
+    hue: number;
+}
+
 export function renderImage(img: HTMLImageElement, imageCanvas: HTMLCanvasElement, canvasContext: CanvasRenderingContext2D, controls: Controls) {
     canvasContext.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
     const imageData = canvasContext.getImageData(0, 0, imageCanvas.width, imageCanvas.height);
-
+    let basicData = {
+        imageData,
+        i: 0
+    }
     for (let i = 0; i < imageData.data.length; i += 4) {
-        adjustBrightness(imageData, i, controls.brightness.value);
-        adjustContrast(imageData, i, controls.contrast.value);
-        adjustSaturation(imageData, i, controls.saturation.value);
-        adjustGreenSaturation(imageData, i, controls.greenSaturation.value);
-        adjustRedSaturation(imageData, i, controls.redSaturation.value);
-        adjustBlueSaturation(imageData, i, controls.blueSaturation.value);
-        adjustPurpleSaturation(imageData, i, controls.purpleSaturation.value);
-        adjustTealSaturation(imageData, i, controls.tealSaturation.value);
-        adjustYellowSaturation(imageData, i, controls.yellowSaturation.value);
+        basicData.i = i;
+        adjustBrightness(basicData, controls.brightness.value);
+        adjustContrast(basicData, controls.contrast.value);
+
+        const mean = getMean(imageData, i);
+        const saturationData = {
+            ...basicData,
+            mean
+        }
+        adjustSaturation(saturationData, controls.saturation.value);
+        const hue = getHue(imageData, i);
+        const colorSaturationData = {
+            ...saturationData,
+            hue
+        }
+        adjustColorSaturation(colorSaturationData, controls.greenSaturation.value, 'green');
+        adjustColorSaturation(colorSaturationData, controls.redSaturation.value, 'red');
+        adjustColorSaturation(colorSaturationData, controls.blueSaturation.value, 'blue');
     }
 
     canvasContext.putImageData(imageData, 0, 0);
 }
 
-function adjustBrightness(data: ImageData, i: number, value: any): void {
+function adjustBrightness(data: BasicData, value: any): void {
     value = Number.parseInt(value) * 0.5;
     if (value > 0) {
-        brighten(data, i, value);
+        brighten(data.imageData, data.i, value);
     } else {
-        darken(data, i, value * -1);
+        darken(data.imageData, data.i, value * -1);
     }
 }
 
-function adjustContrast(data: ImageData, i: number, value: any): void {
-    value = Number.parseInt(value) * 0.25;
-    const mean = getMean(data, i);
-    if (value > 0) {
-        if (isBright(mean)) {
-            brighten(data, i, value);
+function adjustContrast(data: BasicData, value: any): void {
+    value = Number.parseInt(value) * 0.5;
+    const mean = getMean(data.imageData, data.i);
+    if (isBright(mean)) {
+        if (value > 0) {
+            brighten(data.imageData, data.i, value);
         } else {
-            darken(data, i, value);
+            darken(data.imageData, data.i, value);
         }
     } else {
-        value *= -1;
-        if (isBright(mean)) {
-            darken(data, i, value);
+        if (value > 0) {
+            darken(data.imageData, data.i, value);
         } else {
-            brighten(data, i, value);
+            brighten(data.imageData, data.i, value * -1);
         }
+
     }
 }
 
-function adjustGreenSaturation(data: ImageData, i: number, value: any): void {
+function adjustSaturation(data: SaturationData, value: any): void {
     value = Number.parseInt(value);
-    const mean = getMean(data, i);
-    if (isGreen(data, i)) {
-        saturate(data, i, mean, value);
-    }
+    saturate(data, value);
 }
 
-function adjustRedSaturation(data: ImageData, i: number, value: any): void {
+function adjustColorSaturation(data: ColorSaturationData, value: any, color: string) {
     value = Number.parseInt(value);
-    const mean = getMean(data, i);
-    if (isRed(data, i)) {
-        saturate(data, i, mean, value);
+    switch (color) {
+        case 'red':
+            if (isRed(data)) {
+                saturate(data, value)
+            }
+            break;
+        case 'green':
+            if (isGreen(data)) {
+                saturate(data, value)
+            }
+            break;
+        case 'blue':
+            if (isBlue(data)) {
+                saturate(data, value)
+            }
+            break;
     }
-}
-
-function adjustBlueSaturation(data: ImageData, i: number, value: any): void {
-    value = Number.parseInt(value);
-    const mean = getMean(data, i);
-    if (isBlue(data, i)) {
-        saturate(data, i, mean, value);
-    }
-}
-
-function adjustPurpleSaturation(data: ImageData, i: number, value: any): void {
-    value = Number.parseInt(value);
-    const mean = getMean(data, i);
-    if (isPurple(data, i)) {
-        saturate(data, i, mean, value);
-    }
-}
-
-function adjustTealSaturation(data: ImageData, i: number, value: any): void {
-    value = Number.parseInt(value);
-    const mean = getMean(data, i);
-    if (isTeal(data, i)) {
-        saturate(data, i, mean, value);
-    }
-}
-
-function adjustYellowSaturation(data: ImageData, i: number, value: any): void {
-    value = Number.parseInt(value);
-    const mean = getMean(data, i);
-    if (isYellow(data, i)) {
-        saturate(data, i, mean, value);
-    }
-}
-
-function adjustSaturation(data: ImageData, i: number, value: any): void {
-    value = Number.parseInt(value);
-    const mean = getMean(data, i);
-    saturate(data, i, mean, value);
 }
