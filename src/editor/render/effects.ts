@@ -16,7 +16,7 @@ export function darken(data: ImageData, i: number, value: number): void {
 }
 
 export function saturate(data: SaturationData, value: number): void {
-    for (let i = data.i; i < data.i + 4; i++) {
-        data.imageData.data[i + 0] += (data.imageData.data[i + 0] - data.mean) * value / 100;
-    }
+    data.imageData.data[data.i + 0] += (data.imageData.data[data.i + 0] - data.mean) * value / 100;
+    data.imageData.data[data.i + 1] += (data.imageData.data[data.i + 1] - data.mean) * value / 100;
+    data.imageData.data[data.i + 2] += (data.imageData.data[data.i + 2] - data.mean) * value / 100;
 }

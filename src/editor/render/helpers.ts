@@ -9,7 +9,6 @@ export function isBright(mean: number): boolean {
 
 
 // RGB
-
 export function getHue(data: ImageData, i: number) {
     let r = data.data[i + 0], g = data.data[i + 1], b = data.data[i + 2];
     r /= 255, g /= 255, b /= 255;
@@ -51,5 +50,5 @@ export function isOrange(data: ColorSaturationData): boolean {
 }
 
 export function isYellow(data: ColorSaturationData): boolean {
-    return isBetween(data.hue, 50, 80);
+    return isBetween(data.hue, 50, 0);
 }

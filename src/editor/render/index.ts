@@ -29,26 +29,28 @@ export interface ColorSaturationData extends SaturationData {
 export function renderImage(img: HTMLImageElement, imageCanvas: HTMLCanvasElement, canvasContext: CanvasRenderingContext2D, controls: Controls) {
     canvasContext.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
     const imageData = canvasContext.getImageData(0, 0, imageCanvas.width, imageCanvas.height);
-    let basicData = {
-        imageData,
-        i: 0
-    }
     for (let i = 0; i < imageData.data.length; i += 4) {
-        basicData.i = i;
-        adjustBrightness(basicData, controls.brightness.value);
-        adjustContrast(basicData, controls.contrast.value);
-
+        const basicData = {
+            imageData,
+            i
+        }
         const mean = getMean(imageData, i);
+        //way faster runtime when not extending basicData
         const saturationData = {
-            ...basicData,
+            imageData,
+            i,
             mean
         }
-        adjustSaturation(saturationData, controls.saturation.value);
         const hue = getHue(imageData, i);
         const colorSaturationData = {
-            ...saturationData,
+            imageData,
+            i,
+            mean,
             hue
         }
+        adjustBrightness(basicData, controls.brightness.value);
+        adjustContrast(basicData, controls.contrast.value);
+        adjustSaturation(saturationData, controls.saturation.value);
         adjustColorSaturation(colorSaturationData, controls.greenSaturation.value, 'green');
         adjustColorSaturation(colorSaturationData, controls.redSaturation.value, 'red');
         adjustColorSaturation(colorSaturationData, controls.blueSaturation.value, 'blue');
