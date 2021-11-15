@@ -3,7 +3,7 @@ export function getMean(data: ImageData, i: number): number {
 }
 
 export function isBright(mean: number): boolean {
-    return mean > 125;
+    return mean > 130;
 }
 
 export function isBetween(value: number, a: number, b: number): boolean {

@@ -38,8 +38,10 @@ export function renderImage(img: HTMLImageElement, imageCanvas: HTMLCanvasElemen
             imageData,
             i
         }
-        const mean = getMean(imageData, i);
         //way faster runtime when not extending basicData
+        adjustBrightness(basicData, controls.brightness.value);
+        adjustContrast(basicData, controls.contrast.value);
+        const mean = getMean(imageData, i);
         const saturationData = {
             imageData,
             i,
@@ -52,8 +54,6 @@ export function renderImage(img: HTMLImageElement, imageCanvas: HTMLCanvasElemen
             mean,
             hue
         }
-        adjustBrightness(basicData, controls.brightness.value);
-        adjustContrast(basicData, controls.contrast.value);
         adjustSaturation(saturationData, controls.saturation.value);
         adjustColorSaturation(colorSaturationData, controls.redSaturation.value, isRed);
         adjustColorSaturation(colorSaturationData, controls.orangeSaturation.value, isOrange);
@@ -79,19 +79,20 @@ function adjustBrightness(data: BasicData, value: any): void {
 }
 
 function adjustContrast(data: BasicData, value: any): void {
-    value = Number.parseInt(value) * 0.5;
+    value = Number.parseInt(value) * 0.25;
     const mean = getMean(data.imageData, data.i);
-    if (isBright(mean)) {
-        if (value > 0) {
+    if (value > 0) {
+        if (isBright(mean)) {
             brighten(data.imageData, data.i, value);
         } else {
             darken(data.imageData, data.i, value);
         }
     } else {
-        if (value > 0) {
+        value *= -1;
+        if (isBright(mean)) {
             darken(data.imageData, data.i, value);
         } else {
-            brighten(data.imageData, data.i, value * -1);
+            brighten(data.imageData, data.i, value);
         }
 
     }

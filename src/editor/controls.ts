@@ -1,35 +1,50 @@
-function createControl(label: string, defaultValue: string, parent: HTMLElement): HTMLInputElement {
-    const root = document.createElement('div');
+function createControl(label: string, defaultValue: string, parent: HTMLElement): {
+    controlParent: HTMLElement,
+    controlElement: HTMLInputElement
+} {
     const labelElement = document.createElement('label');
     labelElement.innerText = label;
     labelElement.htmlFor = label;
+
     const controlElement = document.createElement('input');
     controlElement.value = defaultValue;
     controlElement.name = label;
+
+    const root = document.createElement('div');
+    root.classList.add('control-item');
     root.appendChild(labelElement);
     root.appendChild(controlElement);
     parent.appendChild(root);
-    return controlElement;
+    return {
+        controlParent: root,
+        controlElement
+    };
 }
 
 export function createRangeControl(min: number, max: number, label: string, defaultValue: number, parent: HTMLElement): HTMLInputElement {
-    const element = createControl(label, defaultValue.toString(), parent);
-    const number = document.createElement('input');
-    number.type = 'number';
-    number.min = min.toString();
-    number.max = max.toString();
-    number.type = 'number';
-    number.value = element.value;
-    element.addEventListener('change', () => {
-        number.value = element.value;
+    const { controlElement, controlParent } = createControl(label, defaultValue.toString(), parent);
+    controlElement.type = 'range';
+    controlElement.min = min.toString();
+    controlElement.max = max.toString();
+    controlElement.classList.add('range-element')
+    controlParent.appendChild(createRangeNumberControl(controlElement));
+    return controlElement;
+}
+
+function createRangeNumberControl(rangeElement: HTMLInputElement) {
+    const numberElement = document.createElement('input');
+    numberElement.classList.add('number-element')
+    numberElement.min = rangeElement.min;
+    numberElement.max = rangeElement.max;
+    numberElement.type = 'number';
+    numberElement.value = rangeElement.value;
+    rangeElement.addEventListener('change', () => {
+        numberElement.value = rangeElement.value;
     });
-    number.addEventListener('change', () => {
-        element.value = number.value;
-        element.dispatchEvent(new InputEvent('change'))
+    numberElement.addEventListener('change', () => {
+        rangeElement.value = numberElement.value;
+        rangeElement.dispatchEvent(new InputEvent('change'));
     });
-    element.type = 'range';
-    element.min = min.toString();
-    element.max = max.toString();
-    parent.appendChild(number);
-    return element;
+    return numberElement;
+
 }
