@@ -1,4 +1,3 @@
-import { ColorSaturationData } from './index';
 export function getMean(data: ImageData, i: number): number {
     return (data.data[i + 0] + data.data[i + 1] + data.data[i + 2]) / 3;
 }
@@ -7,8 +6,10 @@ export function isBright(mean: number): boolean {
     return mean > 125;
 }
 
+export function isBetween(value: number, a: number, b: number): boolean {
+    return value > a && value <= b;
+}
 
-// RGB
 export function getHue(data: ImageData, i: number) {
     let r = data.data[i + 0], g = data.data[i + 1], b = data.data[i + 2];
     r /= 255, g /= 255, b /= 255;
@@ -28,27 +29,4 @@ export function getHue(data: ImageData, i: number) {
     }
 
     return h * 360;
-}
-
-function isBetween(value: number, a: number, b: number): boolean {
-    return value > a && value <= b;
-}
-export function isRed(data: ColorSaturationData): boolean {
-    return data.hue > 350 || data.hue <= 10;
-}
-
-export function isGreen(data: ColorSaturationData): boolean {
-    return isBetween(data.hue, 100, 130);
-}
-
-export function isBlue(data: ColorSaturationData): boolean {
-    return isBetween(data.hue, 230, 250);
-}
-
-export function isOrange(data: ColorSaturationData): boolean {
-    return isBetween(data.hue, 20, 50);
-}
-
-export function isYellow(data: ColorSaturationData): boolean {
-    return isBetween(data.hue, 50, 0);
 }

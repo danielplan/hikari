@@ -1,5 +1,6 @@
 import { brighten, darken, saturate } from './effects';
-import { isBright, getMean, isRed, getHue, isGreen, isBlue } from './helpers';
+import { isBright, getMean, getHue } from './helpers';
+import { isRed, isBlue, isGreen, isOrange, isYellow, isTeal, isCyan, isMagenta, isPurple } from './colors';
 
 interface Controls {
     brightness: HTMLInputElement;
@@ -7,10 +8,13 @@ interface Controls {
     saturation: HTMLInputElement;
     greenSaturation: HTMLInputElement;
     redSaturation: HTMLInputElement;
+    orangeSaturation: HTMLInputElement;
+    yellowSaturation: HTMLInputElement;
+    tealSaturation: HTMLInputElement;
+    cyanSaturation: HTMLInputElement;
     blueSaturation: HTMLInputElement;
     purpleSaturation: HTMLInputElement;
-    tealSaturation: HTMLInputElement;
-    yellowSaturation: HTMLInputElement;
+    magentaSaturation: HTMLInputElement;
 }
 
 export interface BasicData {
@@ -51,9 +55,15 @@ export function renderImage(img: HTMLImageElement, imageCanvas: HTMLCanvasElemen
         adjustBrightness(basicData, controls.brightness.value);
         adjustContrast(basicData, controls.contrast.value);
         adjustSaturation(saturationData, controls.saturation.value);
-        adjustColorSaturation(colorSaturationData, controls.greenSaturation.value, 'green');
-        adjustColorSaturation(colorSaturationData, controls.redSaturation.value, 'red');
-        adjustColorSaturation(colorSaturationData, controls.blueSaturation.value, 'blue');
+        adjustColorSaturation(colorSaturationData, controls.redSaturation.value, isRed);
+        adjustColorSaturation(colorSaturationData, controls.orangeSaturation.value, isOrange);
+        adjustColorSaturation(colorSaturationData, controls.yellowSaturation.value, isYellow);
+        adjustColorSaturation(colorSaturationData, controls.greenSaturation.value, isGreen);
+        adjustColorSaturation(colorSaturationData, controls.tealSaturation.value, isTeal);
+        adjustColorSaturation(colorSaturationData, controls.cyanSaturation.value, isCyan);
+        adjustColorSaturation(colorSaturationData, controls.blueSaturation.value, isBlue);
+        adjustColorSaturation(colorSaturationData, controls.magentaSaturation.value, isMagenta);
+        adjustColorSaturation(colorSaturationData, controls.purpleSaturation.value, isPurple);
     }
 
     canvasContext.putImageData(imageData, 0, 0);
@@ -92,23 +102,9 @@ function adjustSaturation(data: SaturationData, value: any): void {
     saturate(data, value);
 }
 
-function adjustColorSaturation(data: ColorSaturationData, value: any, color: string) {
+function adjustColorSaturation(data: ColorSaturationData, value: any, isColor: (data: ColorSaturationData) => boolean) {
     value = Number.parseInt(value);
-    switch (color) {
-        case 'red':
-            if (isRed(data)) {
-                saturate(data, value)
-            }
-            break;
-        case 'green':
-            if (isGreen(data)) {
-                saturate(data, value)
-            }
-            break;
-        case 'blue':
-            if (isBlue(data)) {
-                saturate(data, value)
-            }
-            break;
+    if (isColor(data)) {
+        saturate(data, value);
     }
 }
