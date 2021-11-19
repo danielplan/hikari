@@ -1,5 +1,5 @@
 import { createRangeControl } from "./controls";
-import Module from './render/wasm.js';
+import Module from './render/renderEngine.js';
 
 interface Controls {
     brightness: HTMLInputElement;
@@ -73,7 +73,7 @@ function renderImage(img: HTMLImageElement, imageCanvas: HTMLCanvasElement, canv
     const imageData = canvasContext.getImageData(0, 0, imageCanvas.width, imageCanvas.height);
     Module.HEAP16.set(imageData.data);
 
-    console.log(render(0, controlValues, imageData.data.length));
+    render(0, controlValues, imageData.data.length);
 
     for (let i = 0; i < imageData.data.length; i++) {
         imageData.data[i] = Module.HEAP16[i];
