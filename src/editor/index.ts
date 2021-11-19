@@ -68,7 +68,7 @@ function renderControls(root: HTMLElement, img: HTMLImageElement) {
 
 function renderImage(img: HTMLImageElement, imageCanvas: HTMLCanvasElement, canvasContext: CanvasRenderingContext2D,
     controls: Controls, render: renderFunction, Module: any) {
-    const controlValues = Object.values(controls).map(c => Number.parseInt(c.value,));
+    const controlValues = Object.values(controls).map(c => Number.parseInt(c.value));
     canvasContext.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
     const imageData = canvasContext.getImageData(0, 0, imageCanvas.width, imageCanvas.height);
     Module.HEAP16.set(imageData.data);
