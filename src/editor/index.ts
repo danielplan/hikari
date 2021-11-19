@@ -1,6 +1,22 @@
 import { createRangeControl } from "./controls";
 import Module from './render/wasm.js';
 
+interface Controls {
+    brightness: HTMLInputElement;
+    contrast: HTMLInputElement;
+    saturation: HTMLInputElement;
+    greenSaturation: HTMLInputElement;
+    redSaturation: HTMLInputElement;
+    orangeSaturation: HTMLInputElement;
+    yellowSaturation: HTMLInputElement;
+    tealSaturation: HTMLInputElement;
+    cyanSaturation: HTMLInputElement;
+    blueSaturation: HTMLInputElement;
+    purpleSaturation: HTMLInputElement;
+    magentaSaturation: HTMLInputElement;
+}
+
+type renderFunction = (heapStart: number, controlValues: number[], length: number) => number;
 
 
 const imageCanvas = document.createElement('canvas');
@@ -43,23 +59,21 @@ function renderControls(root: HTMLElement, img: HTMLImageElement) {
     }
 
     Module().then((Module: any) => {
-        Object.values(controls).forEach((v) => {
-            v.addEventListener('change', () => {
-                renderImage(img, imageCanvas, canvasContext, Module);
-            })
-        });
-    }
-    );
-
+        const render: renderFunction = Module.cwrap('render', 'number', ['number', 'array', 'number']);
+        Object.values(controls).forEach((v) =>
+            v.addEventListener('change', () => renderImage(img, imageCanvas, canvasContext, controls, render, Module))
+        );
+    });
 }
 
-function renderImage(img: HTMLImageElement, imageCanvas: HTMLCanvasElement, canvasContext: CanvasRenderingContext2D, Module: any) {
+function renderImage(img: HTMLImageElement, imageCanvas: HTMLCanvasElement, canvasContext: CanvasRenderingContext2D,
+    controls: Controls, render: renderFunction, Module: any) {
+    const controlValues = Object.values(controls).map(c => Number.parseInt(c.value,));
     canvasContext.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
     const imageData = canvasContext.getImageData(0, 0, imageCanvas.width, imageCanvas.height);
-    for (let i = 0; i < imageData.data.length; i++) {
-        Module.HEAP16[i] = imageData.data[i];
-    }
-    Module.ccall('render', null, ['number', 'number'], [0, imageData.data.length]);
+    Module.HEAP16.set(imageData.data);
+
+    console.log(render(0, controlValues, imageData.data.length));
 
     for (let i = 0; i < imageData.data.length; i++) {
         imageData.data[i] = Module.HEAP16[i];

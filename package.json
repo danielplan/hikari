@@ -8,7 +8,7 @@
     "serve": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
-    "compile": "emcc src/editor/render/wasm.c -o src/editor/render/wasm.js -s EXTRA_EXPORTED_RUNTIME_METHODS=['ccall','cwrap','_malloc'] -s EXPORT_ES6=1 -s MODULARIZE=1"
+    "compile": "emcc src/editor/render/wasm.c -o src/editor/render/wasm.js -s EXTRA_EXPORTED_RUNTIME_METHODS=['ccall','cwrap'] -s EXPORT_ES6=1 -s MODULARIZE=1"
   },
   "devDependencies": {
     "gh-pages": "^3.2.3",

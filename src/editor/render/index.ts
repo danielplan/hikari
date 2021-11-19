@@ -2,21 +2,6 @@ import { brighten, darken, saturate } from './effects';
 import { isBright, getMean, getHue } from './helpers';
 import { isRed, isBlue, isGreen, isOrange, isYellow, isTeal, isCyan, isMagenta, isPurple } from './colors';
 
-interface Controls {
-    brightness: HTMLInputElement;
-    contrast: HTMLInputElement;
-    saturation: HTMLInputElement;
-    greenSaturation: HTMLInputElement;
-    redSaturation: HTMLInputElement;
-    orangeSaturation: HTMLInputElement;
-    yellowSaturation: HTMLInputElement;
-    tealSaturation: HTMLInputElement;
-    cyanSaturation: HTMLInputElement;
-    blueSaturation: HTMLInputElement;
-    purpleSaturation: HTMLInputElement;
-    magentaSaturation: HTMLInputElement;
-}
-
 export interface BasicData {
     imageData: ImageData;
     i: number;
@@ -67,15 +52,6 @@ export function renderImage(img: HTMLImageElement, imageCanvas: HTMLCanvasElemen
     }
 
     canvasContext.putImageData(imageData, 0, 0);
-}
-
-function adjustBrightness(data: BasicData, value: any): void {
-    value = Number.parseInt(value) * 0.5;
-    if (value > 0) {
-        brighten(data.imageData, data.i, value);
-    } else {
-        darken(data.imageData, data.i, value * -1);
-    }
 }
 
 function adjustContrast(data: BasicData, value: any): void {
