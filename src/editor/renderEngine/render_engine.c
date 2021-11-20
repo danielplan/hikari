@@ -23,9 +23,8 @@ void render(uint8_t* a, int8_t* value_array, int length) {
     double magentaSaturation = value_array[11] / 100.0;
 
     for (int i = 0; i < length; i += 4) {
-        double mean = getMean(&a[i]);
         adjustBrightness(&a[i], brightness);
-        mean = getMean(&a[i]);
+        double mean = getMean(&a[i]);
         adjustContrast(&a[i], contrast, mean);
         mean = getMean(&a[i]);
         adjustSaturation(&a[i], saturation, mean);
