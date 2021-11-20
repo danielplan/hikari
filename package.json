@@ -4,7 +4,7 @@
   "homepage": "http://danielplan.github.io/hikari",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && npm run compile && cp src/editor/render/renderEngine.wasm dist/",
     "serve": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
