@@ -4,7 +4,24 @@
 #include <math.h>
 #include <emscripten/emscripten.h>
 
-float getHue(int16_t *a)
+uint8_t secureAdd(int x, int y)
+{
+    int sum = x + y;
+    if (sum < 0)
+    {
+        return 0;
+    }
+    else if (sum > 255)
+    {
+        return 255;
+    }
+    else
+    {
+        return sum;
+    }
+}
+
+float getHue(uint8_t *a)
 {
     float fR = a[0];
     float fG = a[1];
@@ -41,11 +58,12 @@ float getHue(int16_t *a)
     return fH;
 }
 
-void adjustBrightness(int16_t *a, int amount)
+void adjustBrightness(uint8_t *a, int amount)
 {
-    a[0] += amount;
-    a[1] += amount;
-    a[2] += amount;
+    for (int i = 0; i < 3; i++)
+    {
+        a[i] = secureAdd(a[i], amount);
+    }
 }
 
 int isBright(float value)
@@ -60,14 +78,15 @@ int isBright(float value)
     }
 }
 
-void adjustSaturation(int16_t *a, double amount, float mean)
+void adjustSaturation(uint8_t *a, double amount, float mean)
 {
-    a[0] += (a[0] - mean) * amount;
-    a[1] += (a[1] - mean) * amount;
-    a[2] += (a[2] - mean) * amount;
+    for (int i = 0; i < 3; i++)
+    {
+        a[i] += (a[i] - mean) * amount;
+    }
 }
 
-void adjustContrast(int16_t *a, int amount, double mean)
+void adjustContrast(uint8_t *a, int amount, double mean)
 {
     amount = amount * 0.5;
     if (amount > 0)
@@ -87,7 +106,7 @@ void adjustContrast(int16_t *a, int amount, double mean)
     }
 }
 
-double getMean(int16_t *a)
+double getMean(uint8_t *a)
 {
     return (a[0] + a[1] + a[2]) / 3.0;
 }
@@ -143,63 +162,63 @@ int isMagenta(double hue)
     return isBetween(hue, 300, 340);
 }
 
-void adjustRedSaturation(int16_t *a, double amount, double mean, double hue)
+void adjustRedSaturation(uint8_t *a, double amount, double mean, double hue)
 {
     if (isRed(hue) == 1)
     {
         adjustSaturation(a, amount, mean);
     }
 }
-void adjustOrangeSaturation(int16_t *a, double amount, double mean, double hue)
+void adjustOrangeSaturation(uint8_t *a, double amount, double mean, double hue)
 {
     if (isOrange(hue) == 1)
     {
         adjustSaturation(a, amount, mean);
     }
 }
-void adjustYellowSaturation(int16_t *a, double amount, double mean, double hue)
+void adjustYellowSaturation(uint8_t *a, double amount, double mean, double hue)
 {
     if (isYellow(hue) == 1)
     {
         adjustSaturation(a, amount, mean);
     }
 }
-void adjustGreenSaturation(int16_t *a, double amount, double mean, double hue)
+void adjustGreenSaturation(uint8_t *a, double amount, double mean, double hue)
 {
     if (isGreen(hue) == 1)
     {
         adjustSaturation(a, amount, mean);
     }
 }
-void adjustTealSaturation(int16_t *a, double amount, double mean, double hue)
+void adjustTealSaturation(uint8_t *a, double amount, double mean, double hue)
 {
     if (isTeal(hue) == 1)
     {
         adjustSaturation(a, amount, mean);
     }
 }
-void adjustCyanSaturation(int16_t *a, double amount, double mean, double hue)
+void adjustCyanSaturation(uint8_t *a, double amount, double mean, double hue)
 {
     if (isCyan(hue) == 1)
     {
         adjustSaturation(a, amount, mean);
     }
 }
-void adjustBlueSaturation(int16_t *a, double amount, double mean, double hue)
+void adjustBlueSaturation(uint8_t *a, double amount, double mean, double hue)
 {
     if (isBlue(hue) == 1)
     {
         adjustSaturation(a, amount, mean);
     }
 }
-void adjustPurpleSaturation(int16_t *a, double amount, double mean, double hue)
+void adjustPurpleSaturation(uint8_t *a, double amount, double mean, double hue)
 {
     if (isPurple(hue) == 1)
     {
         adjustSaturation(a, amount, mean);
     }
 }
-void adjustMagentaSaturation(int16_t *a, double amount, double mean, double hue)
+void adjustMagentaSaturation(uint8_t *a, double amount, double mean, double hue)
 {
     if (isMagenta(hue) == 1)
     {
@@ -208,7 +227,7 @@ void adjustMagentaSaturation(int16_t *a, double amount, double mean, double hue)
 }
 
 EMSCRIPTEN_KEEPALIVE
-void render(int16_t *a, int8_t *value_array, int length)
+void render(uint8_t *a, int8_t *value_array, int length)
 {
     int brightness = value_array[0];
     int contrast = value_array[1];

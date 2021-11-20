@@ -71,13 +71,12 @@ function renderImage(img: HTMLImageElement, imageCanvas: HTMLCanvasElement, canv
     const controlValues = Object.values(controls).map(c => Number.parseInt(c.value));
     canvasContext.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
     const imageData = canvasContext.getImageData(0, 0, imageCanvas.width, imageCanvas.height);
-    Module.HEAP16.set(imageData.data);
+    const cMemory = new Uint8Array(Module.HEAP8.buffer, 0, imageData.data.length);
+    cMemory.set(imageData.data);
 
     render(0, controlValues, imageData.data.length);
 
-    for (let i = 0; i < imageData.data.length; i++) {
-        imageData.data[i] = Module.HEAP16[i];
-    }
+    imageData.data.set(cMemory);
     canvasContext.putImageData(imageData, 0, 0);
 }
 
