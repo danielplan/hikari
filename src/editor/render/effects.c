@@ -15,7 +15,7 @@ uint8_t safeAdd(int x, int y) {
         return sum;
     }
 }
-void adjustBrightness(uint8_t* a, int amount) {
+void adjustBrightness(uint8_t* a, double amount) {
     for (int i = 0; i < 3; i++) {
         a[i] = safeAdd(a[i], amount);
     }
@@ -28,17 +28,8 @@ void adjustSaturation(uint8_t* a, double amount, float mean) {
 }
 
 void adjustContrast(uint8_t* a, int amount, double mean) {
-    amount = amount * 0.5;
-    if (amount > 0) {
-        adjustBrightness(a, (mean - 127) * amount);
-        if (isBright(mean) == 1) {
-            adjustBrightness(a, amount);
-        } else {
-            adjustBrightness(a, -amount);
-        }
-    } else {
-        adjustSaturation(a, amount * 1.5 / 100, 125 + (mean - 125.0) * 0.5);
-    }
+    double f = (127 - mean) * -amount / 100.0;
+    adjustBrightness(a, f);
 }
 
 void adjustRedSaturation(uint8_t* a, double amount, double mean, double hue) {

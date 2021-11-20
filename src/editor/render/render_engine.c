@@ -1,15 +1,14 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <math.h>
-#include <emscripten/emscripten.h>
 #include "helpers.c"
 #include "colors.c"
 #include "effects.c"
+#include <emscripten/emscripten.h>
+#include <math.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 EMSCRIPTEN_KEEPALIVE
-void render(uint8_t *a, int8_t *value_array, int length)
-{
+void render(uint8_t* a, int8_t* value_array, int length) {
     int brightness = value_array[0];
     int contrast = value_array[1];
     double saturation = value_array[2] / 100.0;
@@ -23,10 +22,10 @@ void render(uint8_t *a, int8_t *value_array, int length)
     double purpleSaturation = value_array[10] / 100.0;
     double magentaSaturation = value_array[11] / 100.0;
 
-    for (int i = 0; i < length; i += 4)
-    {
-        adjustBrightness(&a[i], brightness);
+    for (int i = 0; i < length; i += 4) {
         double mean = getMean(&a[i]);
+        adjustBrightness(&a[i], brightness);
+        mean = getMean(&a[i]);
         adjustContrast(&a[i], contrast, mean);
         mean = getMean(&a[i]);
         adjustSaturation(&a[i], saturation, mean);
