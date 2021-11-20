@@ -1,28 +1,11 @@
 import { createRangeControl } from "./controls";
-import Module from './render/renderEngine.js';
-
-interface Controls {
-    brightness: HTMLInputElement;
-    contrast: HTMLInputElement;
-    saturation: HTMLInputElement;
-    greenSaturation: HTMLInputElement;
-    redSaturation: HTMLInputElement;
-    orangeSaturation: HTMLInputElement;
-    yellowSaturation: HTMLInputElement;
-    tealSaturation: HTMLInputElement;
-    cyanSaturation: HTMLInputElement;
-    blueSaturation: HTMLInputElement;
-    purpleSaturation: HTMLInputElement;
-    magentaSaturation: HTMLInputElement;
-}
-
-type renderFunction = (heapStart: number, controlValues: number[], length: number) => number;
-
+import { renderFunction, renderImage } from "./render";
+import Module from './renderEngine/renderEngine.js';
 
 const imageCanvas = document.createElement('canvas');
 const canvasContext = imageCanvas.getContext('2d')!;
 
-export async function renderEditor(root: HTMLElement, files: FileList) {
+export async function startEditor(root: HTMLElement, files: FileList) {
     if (files && files[0]) {
         root.innerHTML = '';
         const file = files[0];
@@ -40,7 +23,6 @@ export async function renderEditor(root: HTMLElement, files: FileList) {
         }
     }
 }
-
 
 function renderControls(root: HTMLElement, img: HTMLImageElement) {
     const controls = {
@@ -61,24 +43,11 @@ function renderControls(root: HTMLElement, img: HTMLImageElement) {
     Module().then((Module: any) => {
         const render: renderFunction = Module.cwrap('render', 'number', ['number', 'array', 'number']);
         Object.values(controls).forEach((v) =>
-            v.addEventListener('change', () => renderImage(img, imageCanvas, canvasContext, controls, render, Module))
+            v.addEventListener('input', () => renderImage(img, imageCanvas, canvasContext, controls, render, Module))
         );
     });
 }
 
-function renderImage(img: HTMLImageElement, imageCanvas: HTMLCanvasElement, canvasContext: CanvasRenderingContext2D,
-    controls: Controls, render: renderFunction, Module: any) {
-    const controlValues = Object.values(controls).map(c => Number.parseInt(c.value));
-    canvasContext.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
-    const imageData = canvasContext.getImageData(0, 0, imageCanvas.width, imageCanvas.height);
-
-    const cMemory = new Uint8Array(Module.HEAP8.buffer, 0, imageData.data.length);
-    cMemory.set(imageData.data);
-    render(0, controlValues, imageData.data.length);
-    imageData.data.set(cMemory);
-
-    canvasContext.putImageData(imageData, 0, 0);
-}
 
 function getBase64(file: File) {
     return new Promise<String>((resolve, reject) => {

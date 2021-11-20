@@ -38,7 +38,7 @@ function createRangeNumberControl(rangeElement: HTMLInputElement) {
     numberElement.max = rangeElement.max;
     numberElement.type = 'number';
     numberElement.value = rangeElement.value;
-    rangeElement.addEventListener('change', () => {
+    rangeElement.addEventListener('input', () => {
         numberElement.value = rangeElement.value;
     });
     numberElement.addEventListener('change', () => {
