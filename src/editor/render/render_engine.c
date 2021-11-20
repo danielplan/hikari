@@ -10,7 +10,7 @@
 EMSCRIPTEN_KEEPALIVE
 void render(uint8_t* a, int8_t* value_array, int length) {
     int brightness = value_array[0];
-    int contrast = value_array[1];
+    double contrast = value_array[1] / -100.0;
     double saturation = value_array[2] / 100.0;
     double redSaturation = value_array[3] / 100.0;
     double orangeSaturation = value_array[4] / 100.0;

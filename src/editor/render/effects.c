@@ -27,8 +27,8 @@ void adjustSaturation(uint8_t* a, double amount, float mean) {
     }
 }
 
-void adjustContrast(uint8_t* a, int amount, double mean) {
-    double f = (127 - mean) * -amount / 100.0;
+void adjustContrast(uint8_t* a, double amount, double mean) {
+    double f = (127 - mean) * amount;
     adjustBrightness(a, f);
 }
 
