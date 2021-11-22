@@ -1,11 +1,7 @@
-#include "helpers.c"
-#include "colors.c"
-#include "effects.c"
+#include "effects.h"
+#include "helpers.h"
 #include <emscripten/emscripten.h>
-#include <math.h>
-#include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 EMSCRIPTEN_KEEPALIVE
 void render(uint8_t* a, int8_t* value_array, int length) {

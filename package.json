@@ -8,7 +8,7 @@
     "serve": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
-    "compile": "emcc -O3 src/editor/renderEngine/render_engine.c -o src/editor/renderEngine/renderEngine.js -s EXTRA_EXPORTED_RUNTIME_METHODS=['ccall','cwrap'] -s EXPORT_ES6=1 -s MODULARIZE=1 -s WASM=1"
+    "compile": "cd src/editor/renderEngine && make"
   },
   "devDependencies": {
     "gh-pages": "^3.2.3",

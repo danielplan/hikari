@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
 #include <emscripten/emscripten.h>
@@ -31,11 +31,11 @@ float getHue(uint8_t* a) {
     return fH;
 }
 
-int isBright(float value) {
+bool isBright(float value) {
     if (value > 125) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
@@ -43,9 +43,20 @@ double getMean(uint8_t* a) {
     return (a[0] + a[1] + a[2]) / 3.0;
 }
 
-int isBetween(double value, int a, int b) {
+bool isBetween(double value, int a, int b) {
     if (value > a && value <= b) {
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
+}
+
+uint8_t safeAdd(int x, int y) {
+    int sum = x + y;
+    if (sum < 0) {
+        return 0;
+    } else if (sum > 255) {
+        return 255;
+    } else {
+        return sum;
+    }
 }

@@ -1,37 +1,35 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
-#include <math.h>
+#include "helpers.h"
 #include <emscripten/emscripten.h>
 
-int isRed(double hue) {
+bool isRed(double hue) {
     if (hue > 340 || hue <= 10) {
         return 1;
     }
     return 0;
 }
 
-int isOrange(double hue) {
+bool isOrange(double hue) {
     return isBetween(hue, 10, 40);
 }
-int isYellow(double hue) {
+bool isYellow(double hue) {
     return isBetween(hue, 40, 60);
 }
-int isGreen(double hue) {
+bool isGreen(double hue) {
     return isBetween(hue, 60, 130);
 }
-int isTeal(double hue) {
+bool isTeal(double hue) {
     return isBetween(hue, 130, 160);
 }
-int isCyan(double hue) {
+bool isCyan(double hue) {
     return isBetween(hue, 160, 220);
 }
-int isBlue(double hue) {
+bool isBlue(double hue) {
     return isBetween(hue, 220, 260);
 }
-int isPurple(double hue) {
+bool isPurple(double hue) {
     return isBetween(hue, 260, 300);
 }
-int isMagenta(double hue) {
+bool isMagenta(double hue) {
     return isBetween(hue, 300, 340);
 }
