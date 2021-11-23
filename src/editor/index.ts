@@ -51,7 +51,7 @@ function renderControls(root: HTMLElement, img: HTMLImageElement) {
             ...controls
         }
         Object.values(allControls).forEach((v) =>
-            v.addEventListener('input', () => renderImage(img, imageCanvas, canvasContext, settings, controls, render, Module))
+            v.addEventListener('change', () => renderImage(img, imageCanvas, canvasContext, settings, controls, render, Module))
         );
     });
 }
