@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 EMSCRIPTEN_KEEPALIVE
-int render(uint8_t* a, uint8_t* settings_array, int8_t* value_array, int length) {
+void render(uint8_t* a, uint8_t* settings_array, int8_t* value_array, int length) {
     int invertion = settings_array[0];
     int bw = settings_array[1];
     int brightness = value_array[0];
@@ -40,5 +40,4 @@ int render(uint8_t* a, uint8_t* settings_array, int8_t* value_array, int length)
         adjustColorSaturation(&a[i], purpleSaturation, mean, hue, 'p');
         adjustColorSaturation(&a[i], magentaSaturation, mean, hue, 'm');
     }
-    return invertion;
 }

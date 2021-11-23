@@ -31,7 +31,8 @@ export function renderImage(img: HTMLImageElement, imageCanvas: HTMLCanvasElemen
 
     const cMemory = new Uint8Array(Module.HEAP8.buffer, 0, imageData.data.length);
     cMemory.set(imageData.data);
-    console.log(render(0, settingsValues, controlValues, imageData.data.length));
+    render(0, settingsValues, controlValues, imageData.data.length);
+    // console.log(render(0, settingsValues, controlValues, imageData.data.length));
     imageData.data.set(cMemory);
 
     canvasContext.putImageData(imageData, 0, 0);
