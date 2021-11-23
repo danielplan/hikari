@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 void invert(uint8_t* a, int value);
-void setBW(uint8_t* a, int value);
+void setBW(uint8_t* a, int value, double mean);
 void adjustBrightness(uint8_t* a, double amount);
 void adjustSaturation(uint8_t* a, double amount, float mean);
 void adjustContrast(uint8_t* a, double amount, double mean);

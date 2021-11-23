@@ -22,8 +22,10 @@ int render(uint8_t* a, uint8_t* settings_array, int8_t* value_array, int length)
 
     for (int i = 0; i < length; i += 4) {
         invert(&a[i], invertion);
-        adjustBrightness(&a[i], brightness);
         double mean = getMean(&a[i]);
+        setBW(&a[i], bw, mean);
+        adjustBrightness(&a[i], brightness);
+        mean = getMean(&a[i]);
         adjustContrast(&a[i], contrast, mean);
         mean = getMean(&a[i]);
         adjustSaturation(&a[i], saturation, mean);

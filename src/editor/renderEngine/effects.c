@@ -24,6 +24,12 @@ void adjustSaturation(uint8_t* a, double amount, float mean) {
     }
 }
 
+void setBW(uint8_t* a, int value, double mean) {
+    if (isChecked(value) == true) {
+        adjustSaturation(a, -1, mean);
+    }
+}
+
 void adjustContrast(uint8_t* a, double amount, double mean) {
     double f = (127 - mean) * amount;
     adjustBrightness(a, f);
