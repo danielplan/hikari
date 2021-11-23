@@ -1,4 +1,4 @@
-import { createRangeControl } from "./controls";
+import { createCheckboxControl, createRangeControl } from "./controls";
 import { renderFunction, renderImage } from "./render";
 import Module from './renderEngine/renderEngine.js';
 
@@ -25,6 +25,10 @@ export async function startEditor(root: HTMLElement, files: FileList) {
 }
 
 function renderControls(root: HTMLElement, img: HTMLImageElement) {
+    const settings = {
+        invert: createCheckboxControl('Invert', root),
+        bw: createCheckboxControl('Black & White', root),
+    }
     const controls = {
         brightness: createRangeControl(-100, 100, 'Brightness', 0, root),
         contrast: createRangeControl(-100, 100, 'Contrast', 0, root),
@@ -41,9 +45,13 @@ function renderControls(root: HTMLElement, img: HTMLImageElement) {
     }
 
     Module().then((Module: any) => {
-        const render: renderFunction = Module.cwrap('render', 'number', ['number', 'array', 'number']);
-        Object.values(controls).forEach((v) =>
-            v.addEventListener('input', () => renderImage(img, imageCanvas, canvasContext, controls, render, Module))
+        const render: renderFunction = Module.cwrap('render', 'number', ['number', 'array', 'array', 'number']);
+        const allControls = {
+            ...settings,
+            ...controls
+        }
+        Object.values(allControls).forEach((v) =>
+            v.addEventListener('input', () => renderImage(img, imageCanvas, canvasContext, settings, controls, render, Module))
         );
     });
 }

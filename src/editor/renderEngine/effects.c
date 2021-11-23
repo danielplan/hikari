@@ -4,6 +4,14 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+void invert(uint8_t* a, int value) {
+    if (isChecked(value) == true) {
+        for (int i = 0; i < 3; i++) {
+            a[i] = safeAdd(255, -a[i]);
+        }
+    }
+}
+
 void adjustBrightness(uint8_t* a, double amount) {
     for (int i = 0; i < 3; i++) {
         a[i] = safeAdd(a[i], amount);
@@ -21,48 +29,52 @@ void adjustContrast(uint8_t* a, double amount, double mean) {
     adjustBrightness(a, f);
 }
 
-void adjustRedSaturation(uint8_t* a, double amount, double mean, double hue) {
-    if (isRed(hue) == true) {
-        adjustSaturation(a, amount, mean);
-    }
-}
-void adjustOrangeSaturation(uint8_t* a, double amount, double mean, double hue) {
-    if (isOrange(hue) == true) {
-        adjustSaturation(a, amount, mean);
-    }
-}
-void adjustYellowSaturation(uint8_t* a, double amount, double mean, double hue) {
-    if (isYellow(hue) == true) {
-        adjustSaturation(a, amount, mean);
-    }
-}
-void adjustGreenSaturation(uint8_t* a, double amount, double mean, double hue) {
-    if (isGreen(hue) == true) {
-        adjustSaturation(a, amount, mean);
-    }
-}
-void adjustTealSaturation(uint8_t* a, double amount, double mean, double hue) {
-    if (isTeal(hue) == true) {
-        adjustSaturation(a, amount, mean);
-    }
-}
-void adjustCyanSaturation(uint8_t* a, double amount, double mean, double hue) {
-    if (isCyan(hue) == true) {
-        adjustSaturation(a, amount, mean);
-    }
-}
-void adjustBlueSaturation(uint8_t* a, double amount, double mean, double hue) {
-    if (isBlue(hue) == true) {
-        adjustSaturation(a, amount, mean);
-    }
-}
-void adjustPurpleSaturation(uint8_t* a, double amount, double mean, double hue) {
-    if (isPurple(hue) == true) {
-        adjustSaturation(a, amount, mean);
-    }
-}
-void adjustMagentaSaturation(uint8_t* a, double amount, double mean, double hue) {
-    if (isMagenta(hue) == true) {
-        adjustSaturation(a, amount, mean);
+void adjustColorSaturation(uint8_t* a, double amount, double mean, double hue, char color) {
+    switch (color) {
+        case 'r':
+            if (isRed(hue) == true) {
+                adjustSaturation(a, amount, mean);
+            }
+            break;
+        case 'o':
+            if (isOrange(hue) == true) {
+                adjustSaturation(a, amount, mean);
+            }
+            break;
+        case 'y':
+            if (isYellow(hue) == true) {
+                adjustSaturation(a, amount, mean);
+            }
+            break;
+        case 'g':
+            if (isGreen(hue) == true) {
+                adjustSaturation(a, amount, mean);
+            }
+            break;
+        case 't':
+            if (isTeal(hue) == true) {
+                adjustSaturation(a, amount, mean);
+            }
+            break;
+        case 'c':
+            if (isCyan(hue) == true) {
+                adjustSaturation(a, amount, mean);
+            }
+            break;
+        case 'b':
+            if (isBlue(hue) == true) {
+                adjustSaturation(a, amount, mean);
+            }
+            break;
+        case 'p':
+            if (isPurple(hue) == true) {
+                adjustSaturation(a, amount, mean);
+            }
+            break;
+        case 'm':
+            if (isMagenta(hue) == true) {
+                adjustSaturation(a, amount, mean);
+            }
+            break;
     }
 }

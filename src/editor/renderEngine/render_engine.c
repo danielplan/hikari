@@ -4,7 +4,9 @@
 #include <stdio.h>
 
 EMSCRIPTEN_KEEPALIVE
-void render(uint8_t* a, int8_t* value_array, int length) {
+int render(uint8_t* a, uint8_t* settings_array, int8_t* value_array, int length) {
+    int invertion = settings_array[0];
+    int bw = settings_array[1];
     int brightness = value_array[0];
     double contrast = value_array[1] / -100.0;
     double saturation = value_array[2] / 100.0;
@@ -19,20 +21,22 @@ void render(uint8_t* a, int8_t* value_array, int length) {
     double magentaSaturation = value_array[11] / 100.0;
 
     for (int i = 0; i < length; i += 4) {
+        invert(&a[i], invertion);
         adjustBrightness(&a[i], brightness);
         double mean = getMean(&a[i]);
         adjustContrast(&a[i], contrast, mean);
         mean = getMean(&a[i]);
         adjustSaturation(&a[i], saturation, mean);
         double hue = getHue(&a[i]);
-        adjustRedSaturation(&a[i], redSaturation, mean, hue);
-        adjustOrangeSaturation(&a[i], orangeSaturation, mean, hue);
-        adjustYellowSaturation(&a[i], yellowSaturation, mean, hue);
-        adjustGreenSaturation(&a[i], greenSaturation, mean, hue);
-        adjustTealSaturation(&a[i], tealSaturation, mean, hue);
-        adjustCyanSaturation(&a[i], cyanSaturation, mean, hue);
-        adjustBlueSaturation(&a[i], blueSaturation, mean, hue);
-        adjustPurpleSaturation(&a[i], purpleSaturation, mean, hue);
-        adjustMagentaSaturation(&a[i], magentaSaturation, mean, hue);
+        adjustColorSaturation(&a[i], redSaturation, mean, hue, 'r');
+        adjustColorSaturation(&a[i], orangeSaturation, mean, hue, 'o');
+        adjustColorSaturation(&a[i], yellowSaturation, mean, hue, 'y');
+        adjustColorSaturation(&a[i], greenSaturation, mean, hue, 'g');
+        adjustColorSaturation(&a[i], tealSaturation, mean, hue, 't');
+        adjustColorSaturation(&a[i], cyanSaturation, mean, hue, 'c');
+        adjustColorSaturation(&a[i], blueSaturation, mean, hue, 'b');
+        adjustColorSaturation(&a[i], purpleSaturation, mean, hue, 'p');
+        adjustColorSaturation(&a[i], magentaSaturation, mean, hue, 'm');
     }
+    return invertion;
 }

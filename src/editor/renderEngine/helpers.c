@@ -60,3 +60,10 @@ uint8_t safeAdd(int x, int y) {
         return sum;
     }
 }
+
+bool isChecked(int checkboxValue) {
+    if (checkboxValue == 1) {
+        return true;
+    }
+    return false;
+}

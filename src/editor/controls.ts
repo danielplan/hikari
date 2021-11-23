@@ -31,6 +31,13 @@ export function createRangeControl(min: number, max: number, label: string, defa
     return controlElement;
 }
 
+export function createCheckboxControl(label: string, parent: HTMLElement): HTMLInputElement {
+    const { controlElement } = createControl(label, '1', parent);
+    controlElement.type = 'checkbox';
+    controlElement.classList.add('checkbox-element');
+    return controlElement;
+}
+
 function createRangeNumberControl(rangeElement: HTMLInputElement) {
     const numberElement = document.createElement('input');
     numberElement.classList.add('number-element')
