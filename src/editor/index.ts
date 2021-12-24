@@ -1,5 +1,5 @@
 import { createCheckboxControl, createRangeControl } from "./controls";
-import { renderFunction, renderImage } from "./render";
+import { renderFunction, renderImage, exportImage, Controls, Settings } from "./render";
 import Module from './renderEngine/renderEngine.js';
 
 const imageCanvas = document.createElement('canvas');
@@ -22,6 +22,13 @@ export async function startEditor(root: HTMLElement, files: FileList) {
             renderControls(root, img);
         }
     }
+}
+
+function createExportButton(root: HTMLElement, img: HTMLImageElement, settings: Settings, controls: Controls, render: renderFunction, Module: any) {
+    const button = document.createElement('button');
+    button.textContent = 'Export';
+    button.onclick = () => exportImage(img, settings, controls, render, Module);
+    root.appendChild(button);
 }
 
 function renderControls(root: HTMLElement, img: HTMLImageElement) {
@@ -50,6 +57,7 @@ function renderControls(root: HTMLElement, img: HTMLImageElement) {
             ...settings,
             ...controls
         }
+        createExportButton(root, img, settings, controls, render, Module);
         Object.values(allControls).forEach((v) =>
             v.addEventListener('change', () => renderImage(img, imageCanvas, canvasContext, settings, controls, render, Module))
         );

@@ -1,9 +1,9 @@
-interface Settings {
+export interface Settings {
     invert: HTMLInputElement,
     bw: HTMLInputElement
 }
 
-interface Controls {
+export interface Controls {
     brightness: HTMLInputElement;
     contrast: HTMLInputElement;
     saturation: HTMLInputElement;
@@ -32,8 +32,34 @@ export function renderImage(img: HTMLImageElement, imageCanvas: HTMLCanvasElemen
     const cMemory = new Uint8Array(Module.HEAP8.buffer, 0, imageData.data.length);
     cMemory.set(imageData.data);
     render(0, settingsValues, controlValues, imageData.data.length);
-    // console.log(render(0, settingsValues, controlValues, imageData.data.length));
     imageData.data.set(cMemory);
 
     canvasContext.putImageData(imageData, 0, 0);
+}
+
+export function exportImage(img: HTMLImageElement, settings: Settings, controls: Controls, render: renderFunction, Module: any) {
+    const canvas = document.createElement('canvas');
+    const imgWidth = img.width;
+    const imgHeight = img.height;
+    let width = 0;
+    let height = 0;
+    let value = 1920;
+    if (imgWidth > imgHeight) {
+        value = Math.min(value, imgWidth);
+        width = value;
+        height = imgHeight * value / imgWidth;
+    } else {
+        value = Math.min(value, imgHeight);
+        height = value;
+        width = imgWidth * value / imgHeight;
+    }
+    canvas.width = width;
+    canvas.height = height;
+    const canvasContext = canvas.getContext('2d')!;
+    canvasContext.drawImage(img, 0, 0, img.width, img.height);
+    renderImage(img, canvas, canvasContext, settings, controls, render, Module);
+    const dataURL = canvas.toDataURL("image/png");
+    const newTab = window.open('about:blank', 'image from canvas');
+    newTab!.document.write("<img src='" + dataURL + "' alt='from canvas'/>");
+
 }
