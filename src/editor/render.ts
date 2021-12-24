@@ -58,8 +58,10 @@ export function exportImage(img: HTMLImageElement, settings: Settings, controls:
     const canvasContext = canvas.getContext('2d')!;
     canvasContext.drawImage(img, 0, 0, img.width, img.height);
     renderImage(img, canvas, canvasContext, settings, controls, render, Module);
-    const dataURL = canvas.toDataURL("image/png");
-    const newTab = window.open('about:blank', 'image from canvas');
-    newTab!.document.write("<img src='" + dataURL + "' alt='from canvas'/>");
+    const dataURL = canvas.toDataURL("image/jpg");
+    const link = document.createElement('a');
+    link.download = 'hikari-export.jpg';
+    link.href = dataURL;
+    link.click();
 
 }
