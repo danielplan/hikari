@@ -21,23 +21,19 @@ export interface Controls {
 export type renderFunction = (heapStart: number, settings: number[], controlValues: number[], length: number) => number;
 
 export function renderImage(img: HTMLImageElement, imageCanvas: HTMLCanvasElement, canvasContext: CanvasRenderingContext2D,
-    settings: Settings, controls: Controls, render: renderFunction, Module: any) {
-
+    settings: Settings, controls: Controls, worker: Worker) {
     const settingsValues = Object.values(settings).map((c: HTMLInputElement) => c.checked ? 1 : 0);
-
     const controlValues = Object.values(controls).map((c: HTMLInputElement) => Number.parseInt(c.value));
     canvasContext.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
     const imageData = canvasContext.getImageData(0, 0, imageCanvas.width, imageCanvas.height);
-
-    const cMemory = new Uint8Array(Module.HEAP8.buffer, 0, imageData.data.length);
-    cMemory.set(imageData.data);
-    render(0, settingsValues, controlValues, imageData.data.length);
-    imageData.data.set(cMemory);
-
-    canvasContext.putImageData(imageData, 0, 0);
+    worker.postMessage({ settingsValues, controlValues, imageData });
+    worker.onmessage = (e) => {
+        const data = e.data;
+        canvasContext.putImageData(data, 0, 0);
+    }
 }
 
-export function exportImage(img: HTMLImageElement, settings: Settings, controls: Controls, render: renderFunction, Module: any) {
+export function exportImage(img: HTMLImageElement, settings: Settings, controls: Controls, worker: Worker) {
     const canvas = document.createElement('canvas');
     const imgWidth = img.width;
     const imgHeight = img.height;
@@ -57,7 +53,7 @@ export function exportImage(img: HTMLImageElement, settings: Settings, controls:
     canvas.height = height;
     const canvasContext = canvas.getContext('2d')!;
     canvasContext.drawImage(img, 0, 0, img.width, img.height);
-    renderImage(img, canvas, canvasContext, settings, controls, render, Module);
+    renderImage(img, canvas, canvasContext, settings, controls, worker);
     const dataURL = canvas.toDataURL("image/jpg");
     const link = document.createElement('a');
     link.download = 'hikari-export.jpg';

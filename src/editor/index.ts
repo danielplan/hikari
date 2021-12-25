@@ -1,6 +1,5 @@
 import { createCheckboxControl, createRangeControl } from "./controls";
-import { renderFunction, renderImage, exportImage, Controls, Settings } from "./render";
-import Module from './renderEngine/renderEngine.js';
+import { renderImage, exportImage, Controls, Settings } from "./render";
 
 const imageCanvas = document.createElement('canvas');
 const canvasContext = imageCanvas.getContext('2d')!;
@@ -24,10 +23,10 @@ export async function startEditor(root: HTMLElement, files: FileList) {
     }
 }
 
-function createExportButton(root: HTMLElement, img: HTMLImageElement, settings: Settings, controls: Controls, render: renderFunction, Module: any) {
+function createExportButton(root: HTMLElement, img: HTMLImageElement, settings: Settings, controls: Controls, worker: Worker) {
     const button = document.createElement('button');
     button.textContent = 'Export';
-    button.onclick = () => exportImage(img, settings, controls, render, Module);
+    button.onclick = () => exportImage(img, settings, controls, worker);
     root.appendChild(button);
 }
 
@@ -51,17 +50,18 @@ function renderControls(root: HTMLElement, img: HTMLImageElement) {
         magentaSaturation: createRangeControl(-100, 100, 'Magenta Saturation', 0, root),
     }
 
-    Module().then((Module: any) => {
-        const render: renderFunction = Module.cwrap('render', 'number', ['number', 'array', 'array', 'number']);
-        const allControls = {
-            ...settings,
-            ...controls
-        }
-        createExportButton(root, img, settings, controls, render, Module);
-        Object.values(allControls).forEach((v) =>
-            v.addEventListener('change', () => renderImage(img, imageCanvas, canvasContext, settings, controls, render, Module))
-        );
-    });
+    const worker = new Worker('src/editor/worker.js', { type: 'module' });
+
+    worker.postMessage({ load: true });
+
+    const allControls = {
+        ...settings,
+        ...controls
+    }
+    createExportButton(root, img, settings, controls, worker);
+    Object.values(allControls).forEach((v) =>
+        v.addEventListener('change', () => renderImage(img, imageCanvas, canvasContext, settings, controls, worker))
+    );
 }
 
 
