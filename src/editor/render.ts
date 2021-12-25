@@ -53,12 +53,12 @@ export function exportImage(img: HTMLImageElement, settings: Settings, controls:
     const canvasContext = canvas.getContext('2d')!;
     canvasContext.drawImage(img, 0, 0, canvas.width, canvas.height);
     renderImage(canvas, canvasContext, canvasContext, settings, controls, worker);
-    worker.addEventListener('message', () => {
+    worker.onmessage = () => {
         const dataURL = canvas.toDataURL("image/jpg");
         const link = document.createElement('a');
         link.download = 'hikari-export.jpg';
         link.href = dataURL;
         link.click();
-    });
-
+        link.remove();
+    }
 }
