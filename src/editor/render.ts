@@ -20,12 +20,11 @@ export interface Controls {
 
 export type renderFunction = (heapStart: number, settings: number[], controlValues: number[], length: number) => number;
 
-export function renderImage(img: HTMLImageElement, imageCanvas: HTMLCanvasElement, canvasContext: CanvasRenderingContext2D,
+export function renderImage(shadowCanvas: HTMLCanvasElement, shadowCanvasContext: CanvasRenderingContext2D, canvasContext: CanvasRenderingContext2D,
     settings: Settings, controls: Controls, worker: Worker) {
     const settingsValues = Object.values(settings).map((c: HTMLInputElement) => c.checked ? 1 : 0);
     const controlValues = Object.values(controls).map((c: HTMLInputElement) => Number.parseInt(c.value));
-    canvasContext.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
-    const imageData = canvasContext.getImageData(0, 0, imageCanvas.width, imageCanvas.height);
+    const imageData = shadowCanvasContext.getImageData(0, 0, shadowCanvas.width, shadowCanvas.height);
     worker.postMessage({ settingsValues, controlValues, imageData });
     worker.onmessage = (e) => {
         const data = e.data;
@@ -52,12 +51,14 @@ export function exportImage(img: HTMLImageElement, settings: Settings, controls:
     canvas.width = width;
     canvas.height = height;
     const canvasContext = canvas.getContext('2d')!;
-    canvasContext.drawImage(img, 0, 0, img.width, img.height);
-    renderImage(img, canvas, canvasContext, settings, controls, worker);
-    const dataURL = canvas.toDataURL("image/jpg");
-    const link = document.createElement('a');
-    link.download = 'hikari-export.jpg';
-    link.href = dataURL;
-    link.click();
+    canvasContext.drawImage(img, 0, 0, canvas.width, canvas.height);
+    renderImage(canvas, canvasContext, canvasContext, settings, controls, worker);
+    worker.addEventListener('message', () => {
+        const dataURL = canvas.toDataURL("image/jpg");
+        const link = document.createElement('a');
+        link.download = 'hikari-export.jpg';
+        link.href = dataURL;
+        link.click();
+    });
 
 }

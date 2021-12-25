@@ -2,7 +2,9 @@ import { createCheckboxControl, createRangeControl } from "./controls";
 import { renderImage, exportImage, Controls, Settings } from "./render";
 
 const imageCanvas = document.createElement('canvas');
+const shadowCanvas = document.createElement('canvas');
 const canvasContext = imageCanvas.getContext('2d')!;
+const shadowCanvasContext = shadowCanvas.getContext('2d')!;
 
 export async function startEditor(root: HTMLElement, files: FileList) {
     if (files && files[0]) {
@@ -18,6 +20,9 @@ export async function startEditor(root: HTMLElement, files: FileList) {
             imageCanvas.setAttribute('width', dimensions.width.toString());
             imageCanvas.setAttribute('height', dimensions.height.toString());
             canvasContext.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
+            shadowCanvas.setAttribute('width', dimensions.width.toString());
+            shadowCanvas.setAttribute('height', dimensions.height.toString());
+            shadowCanvasContext.drawImage(img, 0, 0, shadowCanvas.width, shadowCanvas.height);
             renderControls(root, img);
         }
     }
@@ -60,7 +65,7 @@ function renderControls(root: HTMLElement, img: HTMLImageElement) {
     }
     createExportButton(root, img, settings, controls, worker);
     Object.values(allControls).forEach((v) =>
-        v.addEventListener('change', () => renderImage(img, imageCanvas, canvasContext, settings, controls, worker))
+        v.addEventListener('change', () => renderImage(shadowCanvas, shadowCanvasContext, canvasContext, settings, controls, worker))
     );
 }
 
