@@ -22,8 +22,8 @@ export type renderFunction = (heapStart: number, settings: number[], controlValu
 
 export function renderImage(shadowCanvas: HTMLCanvasElement, shadowCanvasContext: CanvasRenderingContext2D, canvasContext: CanvasRenderingContext2D,
     settings: Settings, controls: Controls, worker: Worker) {
-    const settingsValues = Object.values(settings).map((c: HTMLInputElement) => c.checked ? 1 : 0);
-    const controlValues = Object.values(controls).map((c: HTMLInputElement) => Number.parseInt(c.value));
+    const settingsValues = new Uint8Array(Object.values(settings).map((c: HTMLInputElement) => c.checked ? 1 : 0));
+    const controlValues = new Uint8Array(Object.values(controls).map((c: HTMLInputElement) => (Number.parseInt(c.value) + 100)));
     const imageData = shadowCanvasContext.getImageData(0, 0, shadowCanvas.width, shadowCanvas.height);
     worker.postMessage({ settingsValues, controlValues, imageData });
     worker.onmessage = (e) => {
@@ -50,8 +50,10 @@ export function exportImage(img: HTMLImageElement, settings: Settings, controls:
     }
     canvas.width = width;
     canvas.height = height;
+
     const canvasContext = canvas.getContext('2d')!;
-    canvasContext.drawImage(img, 0, 0, canvas.width, canvas.height);
+    canvasContext.drawImage(img, 0, 0, width, height);
+
     renderImage(canvas, canvasContext, canvasContext, settings, controls, worker);
     worker.onmessage = () => {
         const dataURL = canvas.toDataURL("image/jpg");

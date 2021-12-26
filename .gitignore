@@ -4,5 +4,4 @@ dist
 dist-ssr
 *.local
 .vscode
-src/editor/renderEngine/renderEngine.wasm
-src/editor/renderEngine/renderEngine.js
+src/editor/renderEngine.wasm
