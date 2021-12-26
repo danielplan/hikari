@@ -57,6 +57,10 @@ function renderControls(root: HTMLElement, img: HTMLImageElement) {
     }
 
     const renderer = new RenderWorker();
+    renderer.onmessage = (e) => {
+        const data = e.data;
+        canvasContext.putImageData(data, 0, 0);
+    }
     const exporter = new RenderWorker();
 
     const allControls = {

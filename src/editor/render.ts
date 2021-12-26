@@ -27,10 +27,6 @@ export function renderImage(shadowCanvas: HTMLCanvasElement, shadowCanvasContext
     const imageData = shadowCanvasContext.getImageData(0, 0, shadowCanvas.width, shadowCanvas.height);
 
     worker.postMessage({ settingsValues, controlValues, imageData });
-    worker.onmessage = (e) => {
-        const data = e.data;
-        canvasContext.putImageData(data, 0, 0);
-    }
 }
 
 export function exportImage(img: HTMLImageElement, settings: Settings, controls: Controls, worker: Worker) {
@@ -55,19 +51,22 @@ export function exportImage(img: HTMLImageElement, settings: Settings, controls:
     const canvasContext = canvas.getContext('2d')!;
     canvasContext.drawImage(img, 0, 0, width, height);
 
+    worker.onmessage = (e) => {
+        const data = e.data;
+        canvasContext.putImageData(data, 0, 0);
+        downloadCanvasImage(canvas);
+    }
     renderImage(canvas, canvasContext, canvasContext, settings, controls, worker);
-    worker.onmessage = () => downloadCanvasImage(canvas);
-
 
 }
 
 function downloadCanvasImage(canvas: HTMLCanvasElement) {
     const dataURL = canvas.toDataURL('image/jpg');
-    // const newTab = window.open('about:blank', 'image from canvas');
-    // newTab!.document.write("<img src='" + dataURL + "' alt='from canvas'/>");
-    const link = document.createElement('a');
-    link.download = 'hikari-export.jpg';
-    link.href = dataURL;
-    link.click();
-    link.remove();
+    const newTab = window.open('about:blank', 'image from canvas');
+    newTab!.document.write("<img src='" + dataURL + "' alt='from canvas'/>");
+    // const link = document.createElement('a');
+    // link.download = 'hikari-export.jpg';
+    // link.href = dataURL;
+    // link.click();
+    // link.remove();
 }
