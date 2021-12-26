@@ -30,7 +30,6 @@ export function renderImage(shadowCanvas: HTMLCanvasElement, shadowCanvasContext
     worker.onmessage = (e) => {
         const data = e.data;
         canvasContext.putImageData(data, 0, 0);
-        console.log('data put');
     }
 }
 
@@ -57,12 +56,12 @@ export function exportImage(img: HTMLImageElement, settings: Settings, controls:
     canvasContext.drawImage(img, 0, 0, width, height);
 
     renderImage(canvas, canvasContext, canvasContext, settings, controls, worker);
-    worker.onmessage = () => downloadCanvasImage(canvas, worker);
+    worker.onmessage = () => downloadCanvasImage(canvas);
 
 
 }
 
-function downloadCanvasImage(canvas: HTMLCanvasElement, worker: Worker) {
+function downloadCanvasImage(canvas: HTMLCanvasElement) {
     const dataURL = canvas.toDataURL('image/jpg');
     // const newTab = window.open('about:blank', 'image from canvas');
     // newTab!.document.write("<img src='" + dataURL + "' alt='from canvas'/>");
@@ -71,5 +70,4 @@ function downloadCanvasImage(canvas: HTMLCanvasElement, worker: Worker) {
     link.href = dataURL;
     link.click();
     link.remove();
-    worker.onmessage = null;
 }

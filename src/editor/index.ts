@@ -1,6 +1,6 @@
 import { createCheckboxControl, createRangeControl } from "./controls";
 import { renderImage, exportImage, Controls, Settings } from "./render";
-import MyWorker from './renderWorker?worker';
+import RenderWorker from './renderWorker?worker';
 
 const imageCanvas = document.createElement('canvas');
 const shadowCanvas = document.createElement('canvas');
@@ -56,15 +56,16 @@ function renderControls(root: HTMLElement, img: HTMLImageElement) {
         magentaSaturation: createRangeControl(-100, 100, 'Magenta Saturation', 0, root),
     }
 
-    const worker = new MyWorker();
+    const renderer = new RenderWorker();
+    const exporter = new RenderWorker();
 
     const allControls = {
         ...settings,
         ...controls
     }
-    createExportButton(root, img, settings, controls, worker);
+    createExportButton(root, img, settings, controls, exporter);
     Object.values(allControls).forEach((v) =>
-        v.addEventListener('change', () => renderImage(shadowCanvas, shadowCanvasContext, canvasContext, settings, controls, worker))
+        v.addEventListener('change', () => renderImage(shadowCanvas, shadowCanvasContext, canvasContext, settings, controls, renderer))
     );
 }
 
