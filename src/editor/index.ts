@@ -69,7 +69,7 @@ function renderControls(root: HTMLElement, img: HTMLImageElement) {
     }
     createExportButton(root, img, settings, controls, exporter);
     Object.values(allControls).forEach((v) =>
-        v.addEventListener('change', () => renderImage(shadowCanvas, shadowCanvasContext, canvasContext, settings, controls, renderer))
+        v.addEventListener('change', () => renderImage(shadowCanvas, shadowCanvasContext, settings, controls, renderer))
     );
 }
 
