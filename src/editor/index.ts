@@ -45,6 +45,8 @@ function renderControls(root: HTMLElement, img: HTMLImageElement) {
         brightness: createRangeControl(-100, 100, 'Brightness', 0, root),
         contrast: createRangeControl(-100, 100, 'Contrast', 0, root),
         saturation: createRangeControl(-100, 100, 'Saturation', 0, root),
+        light: createRangeControl(-100, 100, 'Light brightness', 0, root),
+        dark: createRangeControl(-100, 100, 'Dark brightness', 0, root),
         redSaturation: createRangeControl(-100, 100, 'Red Saturation', 0, root),
         orangeSaturation: createRangeControl(-100, 100, 'Orange Saturation', 0, root),
         yellowSaturation: createRangeControl(-100, 100, 'Yellow Saturation', 0, root),

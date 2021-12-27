@@ -7,6 +7,8 @@ export interface Controls {
     brightness: HTMLInputElement;
     contrast: HTMLInputElement;
     saturation: HTMLInputElement;
+    light: HTMLInputElement;
+    dark: HTMLInputElement;
     greenSaturation: HTMLInputElement;
     redSaturation: HTMLInputElement;
     orangeSaturation: HTMLInputElement;

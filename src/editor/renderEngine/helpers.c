@@ -32,7 +32,7 @@ float getHue(uint8_t* a) {
 }
 
 bool isBright(float value) {
-    if (value > 125) {
+    if (value > 80) {
         return true;
     } else {
         return false;
