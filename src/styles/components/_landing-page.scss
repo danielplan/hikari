@@ -1,0 +1,116 @@
+.header-section {
+    height: 100vh;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+
+    .inner {
+        max-width: 50%;
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 96px;
+        margin-bottom: 20px;
+        line-height: 1.2;
+    }
+
+    p {
+        font-size: 24px;
+        margin-bottom: 30px;
+    }
+}
+
+h2 {
+    font-size: 64px;
+    margin-bottom: 40px;
+}
+
+section {
+    margin-bottom: 100px;
+}
+
+.upload-section {
+    .upload-container {
+        height: 60vh;
+        min-height: 200px;
+        width: 100%;
+        border: 2px solid $white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 25px;
+        flex-direction: column;
+        position: relative;
+        text-align: center;
+        cursor: pointer;
+
+        .text {
+            margin-top: 50px;
+        }
+    }
+
+    .or-bar {
+        margin: 20px auto;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 80%;
+
+        span {
+            display: inline-block;
+            padding: 3px 20px;
+            background: $black;
+        }
+
+        &:before {
+            content: ' ';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            top: 50%;
+            z-index: -1;
+            transform: translateY(-50%);
+            background-color: $white;
+        }
+    }
+
+    .button {
+        pointer-events: none;
+    }
+
+    h3 {
+        line-height: 1;
+        font-size: 24px;
+    }
+
+    input {
+        position: absolute;
+        inset: 0 0 0 0;
+        opacity: 0;
+    }
+
+    #error-text {
+        margin-top: 10px;
+        border-radius: 5px;
+        background-color: $white;
+        color: $black;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, 0);
+        padding: 15px 20px;
+        opacity: 0;
+        visibility: hidden;
+        transition: 300ms ease;
+
+        &.visible {
+            visibility: visible;
+            opacity: 1;
+            transform: translate(-50%, 50%);
+        }
+    }
+
+}

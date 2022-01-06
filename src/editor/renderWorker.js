@@ -16,7 +16,6 @@ importData({ imports: {} }).then((Module) => {
 
         render(imageDataOffset, settingsOffset, controlValuesOffset, imageDataLength)
         imageData.data.set(cMemory.slice(0, imageDataLength));
-        console.log('processed');
         postMessage(imageData);
     }
 });

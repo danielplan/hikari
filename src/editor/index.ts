@@ -9,14 +9,15 @@ const shadowCanvasContext = shadowCanvas.getContext('2d')!;
 
 export async function startEditor(root: HTMLElement, files: FileList) {
     if (files && files[0]) {
-        root.innerHTML = '';
         const file = files[0];
         const imgData = await getBase64(file);
-        root.appendChild(imageCanvas);
         const img = new Image();
 
         img.src = imgData.toString();
+
         img.onload = () => {
+            root.innerHTML = '';
+            root.appendChild(imageCanvas);
             const dimensions = resizeImage(img.width, img.height);
             imageCanvas.setAttribute('width', dimensions.width.toString());
             imageCanvas.setAttribute('height', dimensions.height.toString());
@@ -25,6 +26,11 @@ export async function startEditor(root: HTMLElement, files: FileList) {
             shadowCanvas.setAttribute('height', dimensions.height.toString());
             shadowCanvasContext.drawImage(img, 0, 0, shadowCanvas.width, shadowCanvas.height);
             renderControls(root, img);
+        }
+        img.onerror = () => {
+            const element = document.getElementById('error-text')!;
+            element.classList.add('visible');
+            setTimeout(() => element.classList.remove('visible'), 2000);
         }
     }
 }
