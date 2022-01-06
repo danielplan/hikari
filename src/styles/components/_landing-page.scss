@@ -90,6 +90,8 @@ section {
         position: absolute;
         inset: 0 0 0 0;
         opacity: 0;
+        width: 100%;
+        cursor: pointer;
     }
 
     #error-text {
