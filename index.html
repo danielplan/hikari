@@ -5,11 +5,40 @@
     <link rel="icon" type="image/svg+xml" href="/hikari/assets/favicon.17e50649.svg"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Edit your images - Hikari 「光」</title>
-    <script type="module" crossorigin src="/hikari/assets/index.773d731d.js"></script>
-    <link rel="stylesheet" href="/hikari/assets/index.2008b351.css">
+    <script type="module" crossorigin src="/hikari/assets/index.9d6ca552.js"></script>
+    <link rel="stylesheet" href="/hikari/assets/index.478c0856.css">
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <section class="header-section">
+        <div class="container">
+          <div class="inner">
+            <h1>Welcome to Hikari!</h1>
+            <p>The place to make your pictures even more perfect than they already are.</p>
+            <a href="#get-started" class="button">Get Started</a>
+          </div>
+        </div>
+      </section>
+      <section class="upload-section" id="get-started">
+        <div class="container">
+          <h2>Start editing <br/>your images now</h2>
+          <label for="image-uploader" class="upload-container">
+            <div class="inner">
+              <h3>Drag and Drop</h3>
+              <div class="or-bar">
+                <span>
+                  or
+                </span>
+              </div>
+              <button class="button">Browse images</button>
+              <div id="error-text">File type not supported</div>
+              <div class="text">drag and drop your images from your library</div>
+              <input type="file" id="image-uploader" name="image-uploader">
+            </div>
+          </label>
+        </div>
+      </section>
+    </div>
     
   </body>
 </html>
