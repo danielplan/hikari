@@ -1,39 +1,94 @@
+section {
+    padding: 75px 0;
+}
+
 .header-section {
-    height: 100vh;
-    min-height: 600px;
     display: flex;
     align-items: center;
+    position: relative;
+    overflow: hidden;
+
+    @include breakpoint(large) {
+        min-height: 600px;
+        height: 100vh;
+    }
 
     .inner {
-        max-width: 50%;
         width: 100%;
+
+        @include breakpoint(large) {
+            max-width: 50%;
+        }
     }
 
     h1 {
-        font-size: 96px;
+        font-size: 48px;
         margin-bottom: 20px;
         line-height: 1.2;
+
+        @include breakpoint(large) {
+            font-size: 96px;
+        }
     }
 
     p {
-        font-size: 24px;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
+
+        @include breakpoint(large) {
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+    }
+
+    .logo {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.2;
+        z-index: -1;
+
+        height: 20vh;
+
+        @include breakpoint(large) {
+            height: auto;
+        }
+    }
+
+    .background-text {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 240px;
+        -webkit-text-stroke: 2px;
+        -webkit-text-stroke-color: $primary;
+        -webkit-text-fill-color: transparent;
+        z-index: -1;
+        font-weight: bold;
+        opacity: 0.2;
+
+        @include breakpoint(large) {
+            font-size: 50vh;
+        }
     }
 }
 
 h2 {
-    font-size: 64px;
-    margin-bottom: 40px;
+    font-size: 32px;
+    margin-bottom: 20px;
+
+    @include breakpoint(large) {
+        font-size: 64px;
+        margin-bottom: 40px;
+    }
+
 }
 
-section {
-    margin-bottom: 100px;
-}
 
 .upload-section {
     .upload-container {
-        height: 60vh;
-        min-height: 200px;
+        padding: 50px 0;
         width: 100%;
         border: 2px solid $white;
         display: flex;
@@ -45,9 +100,11 @@ section {
         text-align: center;
         cursor: pointer;
 
-        .text {
-            margin-top: 50px;
+        @include breakpoint(large) {
+            height: 70vh;
         }
+
+
     }
 
     .or-bar {
@@ -56,7 +113,7 @@ section {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 80%;
+        width: 100%;
 
         span {
             display: inline-block;
@@ -81,9 +138,17 @@ section {
         pointer-events: none;
     }
 
+    img {
+        margin-bottom: 20px;
+    }
+
     h3 {
         line-height: 1;
-        font-size: 24px;
+        font-size: 22px;
+
+        @include breakpoint(large) {
+            font-size: 28px;
+        }
     }
 
     input {

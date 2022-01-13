@@ -1,0 +1,18 @@
+@use 'sass:math';
+
+@function toRem($px) {
+    @return math.div($px, 16px)+0rem;
+}
+
+@function getFrom($map, $key) {
+    @each $keyValue, $returnValue in $map {
+        @if $keyValue == $key {
+            @return $returnValue;
+        }
+    }
+    @return null;
+}
+
+@function hoverify($color) {
+    @return scale-color($color, $lightness: +5%); 
+}
