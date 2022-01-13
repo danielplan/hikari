@@ -2,11 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8"/>
-    <link rel="icon" type="image/svg+xml" href="/hikari/assets/favicon.17e50649.svg"/>
+    <link rel="icon" type="image/svg+xml" href="/hikari/logo.svg"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Edit your images - Hikari 「光」</title>
     <script type="module" crossorigin src="/hikari/assets/index.9d6ca552.js"></script>
-    <link rel="stylesheet" href="/hikari/assets/index.6da4d9d7.css">
+    <link rel="stylesheet" href="/hikari/assets/index.15790844.css">
   </head>
   <body>
     <div id="app">
@@ -18,12 +18,18 @@
             <a href="#get-started" class="button">Get Started</a>
           </div>
         </div>
+        <img src="/hikari/logo.svg" alt="Logo" class="logo">
+        <div class="background-text">Hikari</div>
       </section>
       <section class="upload-section" id="get-started">
         <div class="container">
-          <h2>Start editing <br/>your images now</h2>
+          <h2>
+            Start editing <br/> your images
+            <span class="text-primary">now</span>
+          </h2>
           <label for="image-uploader" class="upload-container">
             <div class="inner">
+              <img src="/hikari/image.svg" alt="Image Icon">
               <h3>Drag and Drop</h3>
               <div class="or-bar">
                 <span>
@@ -32,7 +38,6 @@
               </div>
               <button class="button">Browse images</button>
               <div id="error-text">File type not supported</div>
-              <div class="text">drag and drop your images from your library</div>
             </div>
             <input type="file" id="image-uploader" name="image-uploader">
           </label>
