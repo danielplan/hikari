@@ -1,0 +1,29 @@
+.render-container {
+  background: $dark-gray;
+  @include breakpoint(large) {
+    height: 100vh;
+    display: flex;
+  }
+
+  .canvas-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 60px 0;
+    @include breakpoint(large) {
+      width: 75%;
+      padding: 0;
+    }
+  }
+
+  .controls-container {
+    overflow: auto;
+    background: $gray;
+    padding: 50px;
+    @include breakpoint(large) {
+      width: 25%;
+      height: 100vh;
+    }
+  }
+}

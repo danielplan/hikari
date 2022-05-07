@@ -20,14 +20,14 @@ void adjustBrightness(uint8_t* a, double amount) {
 void adjustLightBrightness(uint8_t* a, double amount, float mean) {
     if (isBright(mean) == true) {
         for (int i = 0; i < 3; i++) {
-            a[i] = safeAdd(a[i], amount);
+            a[i] = safeAdd(a[i], amount * (mean-80)/175);
         }
     }
 }
 void adjustDarkBrightness(uint8_t* a, double amount, float mean) {
     if (isBright(mean) == false) {
         for (int i = 0; i < 3; i++) {
-            a[i] = safeAdd(a[i], amount);
+            a[i] = safeAdd(a[i],  amount * (-mean+80)/80);
         }
     }
 }

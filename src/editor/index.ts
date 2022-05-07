@@ -17,7 +17,6 @@ export async function startEditor(root: HTMLElement, files: FileList) {
 
         img.onload = () => {
             root.innerHTML = '';
-            root.appendChild(imageCanvas);
             const dimensions = resizeImage(img.width, img.height);
             imageCanvas.setAttribute('width', dimensions.width.toString());
             imageCanvas.setAttribute('height', dimensions.height.toString());
@@ -25,7 +24,18 @@ export async function startEditor(root: HTMLElement, files: FileList) {
             shadowCanvas.setAttribute('width', dimensions.width.toString());
             shadowCanvas.setAttribute('height', dimensions.height.toString());
             shadowCanvasContext.drawImage(img, 0, 0, shadowCanvas.width, shadowCanvas.height);
-            renderControls(root, img);
+            const renderRoot = document.createElement('div');
+            renderRoot.classList.add('render-container');
+            const controlsRoot = document.createElement('div');
+            controlsRoot.classList.add('controls-container');
+            const canvasRoot = document.createElement('div');
+            canvasRoot.classList.add('canvas-container');
+            renderControls(controlsRoot, img);
+
+            root.appendChild(renderRoot);
+            canvasRoot.appendChild(imageCanvas);
+            renderRoot.appendChild(canvasRoot);
+            renderRoot.appendChild(controlsRoot);
         }
         img.onerror = () => {
             const element = document.getElementById('error-text')!;
