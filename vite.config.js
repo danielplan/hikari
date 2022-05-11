@@ -1,3 +1,6 @@
 export default {
-    base: '/hikari/'
-}
+    base: './',
+    build: {
+        assetsInlineLimit: 8096,
+    }
+};
